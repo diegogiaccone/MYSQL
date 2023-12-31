@@ -383,3 +383,41 @@ SELECT * FROM usuario_log;
 
 SELECT * FROM product;
 SELECT * FROM new_product;
+
+CREATE VIEW TotalVentas AS
+SELECT COUNT(*) AS total_ventas FROM ticket;
+
+SELECT * FROM TotalVentas;
+
+CREATE VIEW VentasPorUsuario AS
+SELECT u.user_name, COUNT(t.id) AS cantidad_ventas
+FROM usuario u
+JOIN ticket t ON u.ticket_id = t.id
+GROUP BY u.user_name;
+
+SELECT * FROM VentasPorUsuario;
+
+CREATE VIEW VentasPorCategoria AS
+SELECT c.category_name, COUNT(p.id) AS cantidad_productos_vendidos
+FROM categories c
+LEFT JOIN product p ON c.id = p.category_id
+GROUP BY c.category_name;
+
+SELECT * FROM VentasPorCategoria;
+
+CREATE VIEW ProductoMasVendido AS
+SELECT p.title AS producto, COUNT(c.product_id) AS cantidad_vendida
+FROM cart c
+JOIN product p ON c.product_id = p.id
+GROUP BY c.product_id
+ORDER BY COUNT(c.product_id) DESC
+LIMIT 1;
+
+SELECT * FROM ProductoMasVendido;
+
+CREATE VIEW VentasPorFecha AS
+SELECT budget_date, COUNT(id) AS cantidad_ventas
+FROM ticket
+GROUP BY budget_date;
+
+SELECT * FROM VentasPorFecha;
